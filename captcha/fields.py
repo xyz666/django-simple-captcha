@@ -1,4 +1,5 @@
 from captcha.conf import settings
+from captcha.backport import get_now
 from captcha.models import CaptchaStore
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, NoReverseMatch
@@ -6,7 +7,6 @@ from django.forms import ValidationError
 from django.forms.fields import CharField, MultiValueField
 from django.forms.widgets import TextInput, MultiWidget, HiddenInput
 from django.utils.translation import ugettext_lazy
-from django.utils import timezone
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from six import u
@@ -173,7 +173,7 @@ class CaptchaField(MultiValueField):
             pass
         else:
             try:
-                CaptchaStore.objects.get(response=response, hashkey=value[0], expiration__gt=timezone.now()).delete()
+                CaptchaStore.objects.get(response=response, hashkey=value[0], expiration__gt=get_now()).delete()
             except CaptchaStore.DoesNotExist:
                 raise ValidationError(getattr(self, 'error_messages', {}).get('invalid', ugettext_lazy('Invalid CAPTCHA')))
         return value

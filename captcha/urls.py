@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from captcha.backport import url
 from captcha import views
 
 urlpatterns = [

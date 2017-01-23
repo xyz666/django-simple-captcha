@@ -1,3 +1,6 @@
+backport to older django
+
+
 *********************
 Django Simple Captcha
 *********************

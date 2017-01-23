@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from django.utils import timezone
+from captcha.backport import get_now
 import sys
 
 
@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, **options):
         from captcha.models import CaptchaStore
         verbose = int(options.get('verbosity'))
-        expired_keys = CaptchaStore.objects.filter(expiration__lte=timezone.now()).count()
+        expired_keys = CaptchaStore.objects.filter(expiration__lte=get_now()).count()
         if verbose >= 1:
             print("Currently %d expired hashkeys" % expired_keys)
         try:
